@@ -32,8 +32,8 @@ Model.prototype.get_id = function () {
 };
 
 Model.prototype.get_position = function () {
-  var x = this.x + parent.x;
-  var y = this.y + parent.y;
+  var x = 0//this.x + (this.parent ? this.parent.x : 0);
+  var y = 0//this.y + (this.parent ? this.parent.y : 0);
   var position = {
     x: x,
     y: y
@@ -83,7 +83,7 @@ Model.prototype.to_json = function () {
       parent: parent,
       description: id,
       height: 3.5,
-      thickness: 0.3,
+      thickness: 0.1,
       tVector: [x, y, 0],
       rVector: [0, 0, 0]
     }
@@ -99,7 +99,7 @@ Model.prototype.to_json = function () {
 
 function Room (options) {
   Model.call(this, options);
-  this.type = 'room';
+  this._class = 'room';
   this.parent = options.parent;
   this.width = options.width;
   this.height = options.height;
@@ -153,7 +153,8 @@ Level.prototype.to_json = function () {
 
 function Wall (options) {
   Model.call(this, options);
-  this.type = 'wall';
+  this._class = 'internal_wall';
+  this.thickness = 0.1;
   this.room = options.room;
   this.orientation = options.orientation || 'north';
 }
@@ -164,7 +165,7 @@ Wall.prototype.constructor = Wall;
 Wall.prototype.get_id = function () {
   var parts = [];
   parts.push(this.room.get_id());
-  parts.push(this._type + '_' + this.orientation);
+  parts.push(this._class + '_' + this.orientation);
   var id = parts.join('/');
   return id;
 };
@@ -205,7 +206,8 @@ Wall.prototype.to_json = function () {
       [0, 0], [w, 0]
     ]
   };
-  json.properties.class = 'internal_wall';
+  json.properties.thickness = this.thickness;
+  json.properties.class = this._class;
   json.properties.rVector[2] = a;
   json.properties.connections = [this.room.get_id()];
 
@@ -261,21 +263,54 @@ WallWest.prototype = Object.create(Wall.prototype);
 WallWest.prototype.constructor = WallWest;
 
 /**
+ * WallExternal
+ */
+
+function WallExternal (options) {
+  Wall.call(this, options);
+  this._class = 'external_wall';
+  this.thickness = 0.3;
+}
+
+WallExternal.prototype = Object.create(Wall.prototype);
+WallExternal.prototype.constructor = WallExternal;
+
+
+/**
  * Door
  */
 
 function Door (options) {
   Model.call(this, options);
-  this.type = 'door';
+  this._class = 'door';
 }
 
 Door.prototype = Object.create(Model.prototype);
 Door.prototype.constructor = Door;
 
+Door.prototype.get_position = function () {
+  var x = this.x + (this.parent ? this.parent.x : 0);
+  var y = this.y + (this.parent ? this.parent.y : 0);
+  var position = {
+    x: x,
+    y: y
+  };
+  return position;
+};
+
 Door.prototype.to_json = function () {
+  var json = Model.prototype.to_json.call(this);
 
+  json.geometry = {
+    type: 'LineString',
+    coordinates: [
+      [0, 0], [1, 0]
+    ]
+  };
+  json.properties.class = 'door';
+
+  return json;
 }
-
 
 /**
  * Project
@@ -349,3 +384,16 @@ Project.prototype.create_wall_west = function (options) {
   this.add(wall);
   return wall;
 };
+
+Project.prototype.create_door = function (options) {
+  var door = new Door(options);
+  this.add(door);
+  return door;
+};
+
+Project.prototype.create_wall_external = function (options) {
+  var wall = new WallExternal(options);
+  this.add(wall);
+  return wall;
+};
+
