@@ -106,14 +106,118 @@ function main () {
       door = project.create_door({ parent: wall});
       door.translate({ x: (room_w - 1.5) / 2 + 1.5 });
 
-//stanze centrali
-      room = project.create_room({ width: 3.375, height: 3 * room_h, parent: level});
-      room.translate({ x: room_w + 2.0625 });
+/*
+*
+  CENTRAL ROOMS 
+*/
+
+  //SOUTH
+
+      //south room
+      room = project.create_room({ width: 3.375, height: room_h, parent: level});
+      room.translate({ x: room_w + (room_w - room.width) / 2 });
       room.translate({ y: bath_h });
-      wall = project.create_wall_north({ room: room, parent: level });
-      wall = project.create_wall_east({ room: room, parent: level });
-      wall = project.create_wall_west({ room: room, parent: level });
-      wall = project.create_wall_south({ room: room, parent: level });
+      wall = project.create_wall_north({ room: room, parent: room });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+      wall = project.create_wall_south({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.width - 1) / 2  });
+
+      //central n1
+      room = project.create_room({ width: 3.375, height: bath_h, parent: level});
+      room.translate({ x: room_w + (room_w - room.width) / 2 });
+      room.translate({ y: bath_h + room_h });
+      wall = project.create_wall_north({ room: room, parent: room });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.height - 1) / 2  });
+
+      //central n2
+      room = project.create_room({ width: 3.375, height: bath_h, parent: level});
+      room.translate({ x: room_w + (room_w - room.width) / 2 });
+      room.translate({ y: 2 * bath_h + room_h });
+      wall = project.create_wall_north({ room: room, parent: room });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.height - 1) / 2  });
+     
+      //north room east
+      room = project.create_room({ width: 1.6875, height: room_h, parent: level});
+      room.translate({ x: room_w + (room_w - 2 * room.width) / 2 });
+      room.translate({ y: 3 * bath_h + room_h  });
+      wall = project.create_wall_north({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.width - 1) / 2  });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+
+      //north room west
+      room = project.create_room({ width: 1.6875, height: room_h, parent: level});
+      room.translate({ x: room_w + (room_w - 2 * room.width) / 2  + room.width });
+      room.translate({ y: 3 * bath_h + room_h  });
+      wall = project.create_wall_north({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.width - 1) / 2  });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+      
+  //NORTH
+
+      //south room west
+      room = project.create_room({ width: 1.6875, height: room_h, parent: level});
+      room.translate({ x: room_w + (room_w - 2 * room.width) / 2 });
+      room.translate({ y: bath_h + 4 * room_h  });
+      wall = project.create_wall_south({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.width - 1) / 2  });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+
+      //south room east
+      room = project.create_room({ width: 1.6875, height: room_h, parent: level});
+      room.translate({ x: room_w + (room_w - 2 * room.width) / 2 + room.width });
+      room.translate({ y: bath_h + 4 * room_h });
+      wall = project.create_wall_south({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.width - 1) / 2  });
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+
+      //central n1
+      room = project.create_room({ width: 3.375, height: bath_h, parent: level});
+      room.translate({ x: room_w + (room_w - room.width) / 2  });
+      room.translate({ y: 5 * room_h + bath_h });
+      wall = project.create_wall_south({ room: room, parent: room });
+      wall = project.create_wall_east({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.height - 1) / 2  });
+      wall = project.create_wall_west({ room: room, parent: room });
+      
+      //central n2
+      room = project.create_room({ width: 3.375, height: bath_h, parent: level});
+      room.translate({ x: room_w + (room_w - room.width) / 2  });
+      room.translate({ y: 6 * room_h });
+      wall = project.create_wall_south({ room: room, parent: room });
+      wall = project.create_wall_east({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.height - 1) / 2  });
+      wall = project.create_wall_west({ room: room, parent: room });;
+
+      //north room
+      room = project.create_room({ width: 3.375, height: room_h, parent: level});
+       room.translate({ x: room_w + (room_w - room.width) / 2  });
+      room.translate({ y: 6 * room_h + bath_h });;
+      wall = project.create_wall_north({ room: room, parent: room });
+      door = project.create_door({ parent: wall });
+      door.translate({ x: (room.width - 1) / 2  });
+
+      wall = project.create_wall_east({ room: room, parent: room });
+      wall = project.create_wall_west({ room: room, parent: room });
+      wall = project.create_wall_south({ room: room, parent: room });
+   
 
   var output = project.print();
   var pre = document.getElementById('output');
